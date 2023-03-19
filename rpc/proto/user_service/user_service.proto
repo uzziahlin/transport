@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "/gen";
+
+message UserReq {
+  string id = 1;
+  string name = 2;
+  int32 age = 3;
+}
+
+message UserResp {
+  string msg = 1;
+  string err = 2;
+}
+
