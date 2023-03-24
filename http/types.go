@@ -37,7 +37,7 @@ type Request struct {
 	Method string
 	Url    string
 	Header Header
-	Body   io.Reader
+	Body   io.ReadCloser
 }
 
 func (r *Request) SetHeader(key, value string) {

@@ -29,7 +29,7 @@ func (c DefaultClient) Post(ctx context.Context, url string, contentType string,
 	req := &Request{
 		Method: http.MethodPost,
 		Url:    url,
-		Body:   body,
+		Body:   io.NopCloser(body),
 	}
 
 	req.Header.Set("Content-Type", contentType)
