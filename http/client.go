@@ -4,16 +4,39 @@ import (
 	"context"
 	"io"
 	"net/http"
+	"net/url"
 )
 
-func NewDefaultClient() Client {
-	return &DefaultClient{
+func NewDefaultClient(opts ...ClientOption) Client {
+
+	c := &DefaultClient{
 		client: &http.Client{},
+	}
+
+	for _, opt := range opts {
+		opt(c)
+	}
+
+	if c.proxyUrl != nil {
+		c.client.Transport = &http.Transport{
+			Proxy: http.ProxyURL(c.proxyUrl),
+		}
+	}
+
+	return c
+}
+
+type ClientOption func(*DefaultClient)
+
+func WithProxy(proxyUrl *url.URL) ClientOption {
+	return func(c *DefaultClient) {
+		c.proxyUrl = proxyUrl
 	}
 }
 
 type DefaultClient struct {
-	client *http.Client
+	client   *http.Client
+	proxyUrl *url.URL
 }
 
 func (c DefaultClient) Get(ctx context.Context, url string) (*Response, error) {
